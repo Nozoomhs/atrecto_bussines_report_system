@@ -1,1 +1,7 @@
-This repository was creat to implement the solution for Atrecto's AI Developer challenge.
+This repository was creat to implement the solution for Atrecto's AI Developer challenge. Description of the solution can be found in [Blueprint.md](Blueprint.md)
+---
+### Requirements and Setup
+I assume an installed python, the tested environment is 3.12.11.
+In the environment `pip install requirements.txt`.
+### How to run
+To run the entire pipeline(ingestion->parsing->agents->parsing->agent): run_entire_pipeline.py
