@@ -71,12 +71,14 @@ There **Critical Flags** were indetified from a perspective of what a director w
  - Asks for **confidence** in the decision.
 
  At this point we can specify that these are not currently real agents, as they do not act or communicate in a real world environment. But for a production system we could attach necessary *Databases* , *Cloud infrastrucure*, *Company Policies* and any auxiliary information that is beneficial to the specific agent, introducing a RAG-like infrasctructure. These agents (if well tested and trusted) could then also refresh and modify the sources if they find contradicting information based on the emails (for example close a Jira ticket).
-These Agents each form a strict JSON output stucture, that includes their decision on the thread.  !!! LLM as judge here?? !!!
+These Agents each form a strict JSON output stucture, that includes their decision on the thread.
 These summarized JSON-s are then concatenated by the next parser based on a weighting strategy. This weighting strategy takes into consideration the confidence of the model in the output, the receny of the event, how long an event has been ongoing for. This weighting is a typical parts of the system where careful tweaking of hyperparameters is necessary, this could be done by evaluating the scores by a human in the loop, who is familiar with what is the most important factor is for a company/project. 
+
+
 ![Analytical Engine](./Analytical_Engine.png)
 
 
-
+### LLM as judge
 Another component I would introduce into this infrastructure is using LLM-s as a judge. This is currently not implemented, as I have ran out of time, but the idea is that each agent would have designated judge, which based on the input, and the output provided by the agent, it could score how much it agrees with the agent and offer changes to the output based on evidence. These models can be the same model or different than which the agent uses.  With this extra context the agent can refine the output.
 
 
