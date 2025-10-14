@@ -7,11 +7,11 @@ The models consumed ~ 7GB of GPU memory, this is also currently a requirement. H
 Ollama:
 Two ways to install it:
 1. simply through: https://ollama.com/download
-  After it is installed: ollama pull qwen2.5:7b-instruct
+  After it is installed: `ollama pull qwen2.5:7b-instruct`
 2. Through docker:
-   docker run -d --name ollama -p 11434:11434 --gpus all -v ollama:/root/.ollama ollama/ollama
+   `docker run -d --name ollama -p 11434:11434 --gpus all -v ollama:/root/.ollama ollama/ollama`
    
-   docker exec -it ollama ollama pull qwen2.5:7b-instruct
+   `docker exec -it ollama ollama pull qwen2.5:7b-instruct`
 
 In the environment `pip install -r requirements.txt`.
 ### How to run
