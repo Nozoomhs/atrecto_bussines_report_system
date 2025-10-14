@@ -1,4 +1,5 @@
-This repository was creat to implement the solution for Atrecto's AI Developer challenge. Description of the solution can be found in [Blueprint.md](Blueprint.md)
+This repository was creat to implement the solution for Attrecto's AI Developer challenge. Description of the solution can be found in [Blueprint.md](Blueprint.md)
+Please excuse me for missing a t in the repo name :)
 ---
 ### Requirements and Setup
 I assume an installed python, the tested environment is 3.12.11.
