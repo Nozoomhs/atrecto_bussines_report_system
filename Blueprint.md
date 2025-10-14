@@ -35,12 +35,13 @@ The general pipeline and the dataflow is described in the diagram below.
 - In case we would have actual data of the amount of emails we need to process we could lay out a cost plan, but considering email lengths and storage spaces this should not blow up.
 
 **Scalability considerations:**
-- Partitioning by ingest_date and/or thread_id prevents single monolithic files and enables partition pruning. We could a schedule a merge on ingestion-time small files to 128–512 MB Parquet targets with 64–128 MB row groups. This balance eliminates the small-file problem while preserving enough files per partition to achieve high parallelism. The storage would have the structure for example: */messages/ingest_date/{thread}/message_part-0000.parquet*
-- Idempotency everywhere. Each message has a stable message_hash; blob etag could be used at file level
+- Partitioning by ingest_date and/or thread_id prevents single monolithic files and enables partition pruning. We could schedule a merge on ingestion-time small files to 128–512 MB Parquet targets with 64–128 MB row groups. This balance eliminates the small-file problem while preserving enough files per partition to achieve high parallelism. The storage would have the structure for example: */messages/ingest_date/{thread}/message_part-0000.parquet*
+- We could implement a scheduled process to merge small, fragmented files created during ingestion into larger, optimized Parquet files (e.g., 128-512 MB). This avoids the "small file problem", ensuring high I/O throughput for the analytical engine.
+
 
 **Security considerations:**
-- Network: Private Endpoints to Storage/Bus/Search; Functions with VNet integration; disable public network access.
-- PII handling: Raw zone restricted (short retention). In analytics tables, hash emails, mask names where appropriate, and record source_blob_url only in an access-controlled lineage table.
+- Network:  All services in the pipeline should be configured to operate within a virtual network, using Private Endpoints. This ensures that data never traverses the public internet, drastically reducing the attack surface and protecting against external threats. 
+- PII handling: During the parsing stage, the system should automatically identify and handle Personally Identifiable Information (PII).These then should be consistently hashed or replaced with role titles like 'Project_Manager_1'). (This was currently not a focus)
 
 **Monitoring and Alerts:**
  - Possible service level objectives: ingestion latency,  pipeline success rate, DLQ rate
@@ -62,19 +63,22 @@ There **Critical Flags** were indetified from a perspective of what a director w
 - Ownership Ambiguity: It's task is to indetify threads where the resolution doesn't specify who will do a task, or if there is a topic without clear owners.
 - Cost Criticality: It's task is to identify if threads have resolutions that will have cost consequences for the company.
  For all of these aspects, we form a **Prompt Template** which:
-- Define the **role** of the agent
-- Pulls in the whole simplified thread with **participants**.
-- Specifies output **format**
-- Includes negative-positive **examples** for some cases
-- Specifies **labels** for outputs
-- Asks for **confidence** in the decision.
+ - Define the **role** of the agent
+ - Pulls in the whole simplified thread with **participants**.
+ - Specifies output **format**
+ - Includes negative-positive **examples** for some cases
+ - Specifies **labels** for outputs
+ - Asks for **confidence** in the decision.
 
  At this point we can specify that these are not currently real agents, as they do not act or communicate in a real world environment. But for a production system we could attach necessary *Databases* , *Cloud infrastrucure*, *Company Policies* and any auxiliary information that is beneficial to the specific agent, introducing a RAG-like infrasctructure. These agents (if well tested and trusted) could then also refresh and modify the sources if they find contradicting information based on the emails (for example close a Jira ticket).
-These Agents each form a strict JSON output stucture, that includes their decision on the thread.  !!! LLM as judge here?? !!!
+These Agents each form a strict JSON output stucture, that includes their decision on the thread.
 These summarized JSON-s are then concatenated by the next parser based on a weighting strategy. This weighting strategy takes into consideration the confidence of the model in the output, the receny of the event, how long an event has been ongoing for. This weighting is a typical parts of the system where careful tweaking of hyperparameters is necessary, this could be done by evaluating the scores by a human in the loop, who is familiar with what is the most important factor is for a company/project. 
-![Analytical_Engine]
 
 
+![Analytical Engine](./Analytical_Engine.png)
+
+
+### LLM as judge and other considerations
 Another component I would introduce into this infrastructure is using LLM-s as a judge. This is currently not implemented, as I have ran out of time, but the idea is that each agent would have designated judge, which based on the input, and the output provided by the agent, it could score how much it agrees with the agent and offer changes to the output based on evidence. These models can be the same model or different than which the agent uses.  With this extra context the agent can refine the output.
 
 
@@ -100,6 +104,7 @@ As for the metrics I would introduce:
 - LLM Reliability: JSON-parse failure rate, number of retries.
 - Disagreement rate: Number of times our judges disagreed to the 
 ### Architectural Risk & Mitigation
-I think there are a couple of architectural risks, but the single biggest one is the misslabels or missed critical items from the 4 agents. This could arise from multiple reasons and different reasons must be dealt with differently.
-- Long/Messy context: Threads can be long and multi-topic; naive chunking or truncation skews model decisions and confidence.
+I think there are a couple of architectural risks, but the single biggest one is the misslabels or missed critical items from the 4 agents.
+Threads can be long and multi-topic; naive chunking(which would be a factor in longer threads) or truncation skews model decisions and confidence. Contradicting information may appear as well.
+To **mitigate** it I would create a golden dataset labeled by human oberservers and validate my json outputs against them, and even possibly use some of it to fine-tune the model. 
 
