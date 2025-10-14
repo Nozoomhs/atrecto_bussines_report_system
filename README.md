@@ -2,7 +2,7 @@ This repository was creat to implement the solution for Attrecto's AI Developer 
 Please excuse me for missing a t in the repo name :)
 ---
 ### Requirements and Setup
-I assume an installed python, the tested environment is 3.12.11.
+I assume an installed python, the tested environment is 3.12.11, conda virtual env.
 The models consumed ~ 7GB of GPU memory, this is also currently a requirement. Hopefully it does not cause an issue.
 
 In the environment `pip install -r requirements.txt`.
