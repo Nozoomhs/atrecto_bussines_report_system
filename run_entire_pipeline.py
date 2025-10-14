@@ -89,7 +89,7 @@ if __name__ == "__main__":
             out_path = subdir / f"{safe_tid}.json"
             with open(out_path, "w", encoding="utf-8") as f:
                 json.dump(rec, f, ensure_ascii=False, indent=2)
-        print("wrote prompts to", base_dir)
+    print("wrote prompts to", base_dir)
 
 
 
