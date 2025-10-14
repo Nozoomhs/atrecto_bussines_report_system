@@ -78,7 +78,7 @@ These summarized JSON-s are then concatenated by the next parser based on a weig
 ![Analytical Engine](./Analytical_Engine.png)
 
 
-### LLM as judge
+### LLM as judge and other considerations
 Another component I would introduce into this infrastructure is using LLM-s as a judge. This is currently not implemented, as I have ran out of time, but the idea is that each agent would have designated judge, which based on the input, and the output provided by the agent, it could score how much it agrees with the agent and offer changes to the output based on evidence. These models can be the same model or different than which the agent uses.  With this extra context the agent can refine the output.
 
 
@@ -104,6 +104,7 @@ As for the metrics I would introduce:
 - LLM Reliability: JSON-parse failure rate, number of retries.
 - Disagreement rate: Number of times our judges disagreed to the 
 ### Architectural Risk & Mitigation
-I think there are a couple of architectural risks, but the single biggest one is the misslabels or missed critical items from the 4 agents. This could arise from multiple reasons and different reasons must be dealt with differently.
-- Long/Messy context: Threads can be long and multi-topic; naive chunking or truncation skews model decisions and confidence.
+I think there are a couple of architectural risks, but the single biggest one is the misslabels or missed critical items from the 4 agents.
+Threads can be long and multi-topic; naive chunking(which would be a factor in longer threads) or truncation skews model decisions and confidence. Contradicting information may appear as well.
+To **mitigate** it I would create a golden dataset labeled by human oberservers and validate my json outputs against them, and even possibly use some of it to fine-tune the model. 
 
