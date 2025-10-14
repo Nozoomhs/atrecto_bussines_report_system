@@ -15,11 +15,10 @@ Key properties:
 Usage:
     from agents.human_report_agent import HumanReportAgent
     hr = HumanReportAgent(backend=backend)
-    md = hr.generate_from_file(summary_md_path, organization="Acme", director_name="Jane Doe")
+    md = hr.generate_from_file(summary_md_path)
 """
 
 from pathlib import Path
-from typing import Optional
 from clients.backend import LLMBackend
 from datetime import datetime, timezone
 
@@ -95,7 +94,6 @@ class HumanReportAgent:
         Hard rules (must follow):
         - RETURN ONLY MARKDOWN. DO NOT output JSON, YAML, or code blocks. No braces/brackets.
         - DO NOT invent facts/people/dates/costs not present in the machine summary.
-        - If ownership or due dates are missing, explicitly write: "Owner/Due: MISSING".
         - Keep it concise, executive-friendly, and action-oriented.
 
         Formatting:
@@ -104,11 +102,9 @@ class HumanReportAgent:
         - Then sections (omit if empty): "## Overall Assessment", "## Hotlist (Immediate Attention)",
           "## Risks & Blockers", "## Cost & Approvals", "## Ownership Gaps", "## Next 7 Days — Director Focus"
         - Use short paragraphs and bullet lists. No tables for this brief.
+        - Prioritize threads for attention where there are issues from multiple perspectives.  
 
-        Here is a SHORT EXAMPLE of the EXPECTED MARKDOWN FORMAT (do NOT copy its content):
-        ---
-        {example_md}
-        ---
+        
 
         Context for synthesis (Machine Summary from the scoring/selection stage):
         ---
@@ -117,3 +113,11 @@ class HumanReportAgent:
 
         Produce the final Markdown now. Remember: NO JSON, NO CODE FENCES.
         """.strip()
+
+
+
+"""
+Here is a SHORT EXAMPLE of the EXPECTED MARKDOWN FORMAT (do NOT copy its content):
+        ---
+        {example_md}
+        ---"""
