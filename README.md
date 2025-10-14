@@ -10,6 +10,7 @@ Two ways to install it:
   After it is installed: ollama pull qwen2.5:7b-instruct
 2. Through docker:
    docker run -d --name ollama -p 11434:11434 --gpus all -v ollama:/root/.ollama ollama/ollama
+   
    docker exec -it ollama ollama pull qwen2.5:7b-instruct
 
 In the environment `pip install -r requirements.txt`.
