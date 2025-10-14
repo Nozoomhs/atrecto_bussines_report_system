@@ -75,7 +75,7 @@ class CostAgent:
     def run(self, prompt: str) -> Dict[str, Any]:
         """Run the agent, validate JSON, retry on violations."""
         last_err = None
-        content = self.backend.complete(prompt)
+        content = self.backend.complete(prompt, format="json")
         for _ in range(self.max_retries + 1):
             try:
                 payload = self._coerce_to_json(content)
@@ -111,7 +111,7 @@ class CostAgent:
             "Return ONLY JSON."
         )
         merged = original_prompt + "\n\n" + fix_prompt
-        return self.backend.complete(merged)
+        return self.backend.complete(merged,format="json")
 
 
 # -------------------- Optional quick test --------------------

@@ -92,7 +92,7 @@ class UnresolvedAgent:
         Raises ValueError if still invalid after retries.
         """
         last_err = None
-        content = self.backend.complete(prompt)
+        content = self.backend.complete(prompt, format="json")
         for attempt in range(self.max_retries + 1):
             try:
                 payload = self._coerce_to_json(content)
@@ -132,7 +132,7 @@ class UnresolvedAgent:
             "Return ONLY JSON."
         )
         merged = original_prompt + "\n\n" + fix_prompt
-        return self.backend.complete(merged)
+        return self.backend.complete(merged, format="json")
 
 
 # -------------------- Optional quick test --------------------

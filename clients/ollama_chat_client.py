@@ -9,18 +9,17 @@ class OllamaChatClient(LLMBackend):
     temperature: float = 0.0
     max_tokens: Optional[int] = None
 
-    def complete(self, prompt: str) -> str:
-
-        resp: ChatResponse = chat(
-            model=self.model,
-            messages=[
-                {"role": "user", "content": prompt},
-            ],
-            options={
+    def complete(self, prompt: str, *, format:str = None) -> str:
+        kwargs: Dict[str, Any] = {
+            "model": self.model,
+            "messages": [{"role": "user", "content": prompt}],
+            "options": {
                 "temperature": self.temperature,
                 **({"num_predict": self.max_tokens} if self.max_tokens else {})
             },
-            # This hints Ollama to produce JSON; if the model ignores it we still validate & retry.
-            format="json",
-        )
-        return resp.message.content or ""
+        }
+        if format is not None:  # ← only add when you really want JSON
+            kwargs["format"] = format
+
+        resp: ChatResponse = chat(**kwargs)
+        return (resp.message.content or "").strip()

@@ -21,6 +21,7 @@ Usage:
 from pathlib import Path
 from typing import Optional
 from clients.backend import LLMBackend
+from datetime import datetime, timezone
 
 class HumanReportAgent:
     def __init__(self, backend: LLMBackend) -> None:
@@ -30,16 +31,12 @@ class HumanReportAgent:
         self,
         summary_md_path: Path,
         *,
-        organization: Optional[str] = None,
-        director_name: Optional[str] = None,
         report_title: str = "QBR Executive Summary",
     ) -> str:
         """Load generated  summary from disk and produce a human-readable summary."""
         text = Path(summary_md_path).read_text(encoding="utf-8") if summary_md_path.exists() else ""
         return self.generate_from_text(
             text,
-            organization=organization,
-            director_name=director_name,
             report_title=report_title,
         )
 
@@ -47,8 +44,6 @@ class HumanReportAgent:
         self,
         summary_md_text: str,
         *,
-        organization: Optional[str] = None,
-        director_name: Optional[str] = None,
         report_title: str = "QBR Executive Summary",
     ) -> str:
         """Summarize the provided machine summary text into a Markdown."""
@@ -58,8 +53,6 @@ class HumanReportAgent:
 
         prompt = self._build_prompt(
             summary_md_text,
-            organization=organization,
-            director_name=director_name,
             report_title=report_title,
         )
         out = self.backend.complete(prompt)

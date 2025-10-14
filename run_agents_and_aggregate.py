@@ -176,6 +176,7 @@ def main() -> None:
         exec_summary_path.write_text(executive_md, encoding="utf-8")
     except Exception as _e:
         # Non-fatal: keep the machine summary if LLM summarization fails
+        print(_e)
         pass
 
     # Also write a compact index of all threads with top_score
