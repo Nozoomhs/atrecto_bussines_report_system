@@ -55,8 +55,8 @@ The general pipeline and the dataflow is described in the diagram below.
 
 ## Analytical Engine
 Our analytical engine takes as input the 3 parquet files specified in the earlier stage. 
-A Prompter class with pre-defined templates create a series of prompts, for each thread, for each Critical Flag
-There **Critical Flags** were indetified from a perspective of what a director would be interested in. As the task description already provided 2 very strong clues, I have incorporated those into my solution.
+A Prompter class with pre-defined templates create a series of prompts, for each thread, for each Critical Flag.
+The **Critical Flags** were indetified from a perspective of what a director would be interested in. As the task description already provided 2 very strong clues, I have incorporated those into my solution.
 - Unresolved Items: It's task is to indetify threads where we have unresolved tasks, or there is no clear closing of a work item.
 - Risks/Blockers: It's task is to identify whether there is material or business risk involved or if there is a work item that is being blocker for some reason.
 - Ownership Ambiguity: It's task is to indetify threads where the resolution doesn't specify who will do a task, or if there is a topic without clear owners.
