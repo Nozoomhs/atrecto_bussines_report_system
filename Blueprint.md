@@ -62,12 +62,12 @@ The **Critical Flags** were indetified from a perspective of what a director wou
 - Ownership Ambiguity: It's task is to indetify threads where the resolution doesn't specify who will do a task, or if there is a topic without clear owners.
 - Cost Criticality: It's task is to identify if threads have resolutions that will have cost consequences for the company.
  For all of these aspects, we form a **Prompt Template** which:
- - Define the **role** of the agent
- - Pulls in the whole simplified thread with **participants**.
- - Specifies output **format**
- - Includes negative-positive **examples** for some cases
- - Specifies **labels** for outputs
- - Asks for **confidence** in the decision.
+  - Define the **role** of the agent
+  - Pulls in the whole simplified thread with **participants**.
+  - Specifies output **format**
+  - Includes negative-positive **examples** for some cases
+  - Specifies **labels** for outputs
+  - Asks for **confidence** in the decision.
 
  At this point we can specify that these are not currently real agents, as they do not act or communicate in a real world environment. But for a production system we could attach necessary *Databases* , *Cloud infrastrucure*, *Company Policies* and any auxiliary information that is beneficial to the specific agent, introducing a RAG-like infrasctructure. These agents (if well tested and trusted) could then also refresh and modify the sources if they find contradicting information based on the emails (for example close a Jira ticket).
 These Agents each form a strict JSON output stucture, that includes their decision on the thread.
