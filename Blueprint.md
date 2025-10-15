@@ -90,9 +90,9 @@ Along the description I have presented solutions for the various considerations 
 Regarding robustness I think levaraging determinstic data parsing is key, we can't feed LLMs with with raw, unfiltered data. Judges also meant to catch incosistencies or misleading conclusions. Yet, if we want an extra layer of certainity, we can fine-tune our judges as well through human-labled data.
 As for cost considerations we can monitor and limit our token consumption. We can clearly calculate from our database how many token we will have in a thread. After that if we combine that with our templates we can estimate the full consumption. If the judges are added to the system they certainly add extra costs, but the amount of refinement steps can be maximized and we can still monitor and calculate the amount of tokens consumed.
 ### Monitoring & Trust
-I have described or judge system for improving trust in our system. We could also slightly modify it by using a unified judge after all 4 agents provided output, and only refine through additional context the necessary agent's output.
+I have described above our judge system for improving trust in our system. We could also slightly modify it by using a unified judge after all 4 agents provided output, and only refine through additional context the necessary agent's output.a
 We also verify the output of each agent with Pydantic, which ensures that the output is in the specified format.
-If we were to use LangChain and 
+If we were to use LangChain and LangGraph we could monitor our entire system even better, also introduce proper parallel running of the models, as we would have a state-driven approach.
 As for the metrics I would introduce:
 - Human Agreement Rate:  It measures the percentage of AI-generated flags that the final human judge agrees with, specifically we can measure this on each agent's output and also in the final report.
 - Precision and Recall: Also requires human labeling of teach thread.
