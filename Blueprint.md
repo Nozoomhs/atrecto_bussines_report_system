@@ -32,7 +32,7 @@ The general pipeline and the dataflow is described in the diagram below.
 **Cost Considerations:**
 - We can cut costs on optional parts of the system, especially with leaving out ElasticSearch/Cognitive Search.
 - We can leave out Service Bus as well and start using it if we need to upscale.
-- In case we would have actual data of the amount of emails we need to process we could lay out a cost plan, but considering email lengths and storage spaces this should not blow up.
+- In case we would have actual data of the amount of emails we need to process, we could lay out a cost plan, but considering email lengths and storage spaces this should not blow up.
 
 **Scalability considerations:**
 - Partitioning by ingest_date and/or thread_id prevents single monolithic files and enables partition pruning. We could schedule a merge on ingestion-time small files to 128–512 MB Parquet targets with 64–128 MB row groups. This balance eliminates the small-file problem while preserving enough files per partition to achieve high parallelism. The storage would have the structure for example: */messages/ingest_date/{thread}/message_part-0000.parquet*
