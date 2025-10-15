@@ -69,7 +69,7 @@ The **Critical Flags** were indetified from a perspective of what a director wou
   - Specifies **labels** for outputs
   - Asks for **confidence** in the decision.
  
- I have decided not to idividually copy and paste my prompts into the description, but the can be found in ![prompt parser](./prompt_parser.py). 
+ I have decided not to idividually copy and paste my prompts into the description, but they can be found in ![prompt parser](./prompt_parser.py), in the render functions. 
 
  At this point we can specify that these are not currently real agents, as they do not act or communicate in a real world environment. But for a production system we could attach necessary *Databases* , *Cloud infrastrucure*, *Company Policies* and any auxiliary information that is beneficial to the specific agent, introducing a RAG-like infrasctructure. These agents (if well tested and trusted) could then also refresh and modify the sources if they find contradicting information based on the emails (for example close a Jira ticket).
 These Agents each form a strict JSON output stucture, that includes their decision on the thread.
