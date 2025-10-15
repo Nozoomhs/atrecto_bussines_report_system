@@ -35,9 +35,7 @@ The general pipeline and the dataflow is described in the diagram below.
 - In case we would have actual data of the amount of emails we need to process, we could lay out a cost plan, but considering email lengths and storage spaces this should not blow up.
 
 **Scalability considerations:**
-- Partitioning by ingest_date and/or thread_id prevents single monolithic files and enables partition pruning. We could schedule a merge on ingestion-time small files to 128–512 MB Parquet targets with 64–128 MB row groups. This balance eliminates the small-file problem while preserving enough files per partition to achieve high parallelism. The storage would have the structure for example: */messages/ingest_date/{thread}/message_part-0000.parquet*
-- We could implement a scheduled process to merge small, fragmented files created during ingestion into larger, optimized Parquet files (e.g., 128-512 MB). This avoids the "small file problem", ensuring high I/O throughput for the analytical engine.
-
+- Partitioning by ingest_date and/or thread_id prevents single monolithic files and enables partition pruning. We could schedule a merge on ingestion-time small files to 128–512 MB Parquet targets with 64–128 MB row groups. This balance eliminates the small-file problem while preserving enough files per partition to achieve high parallelism,  ensuring high I/O throughput for the analytical engine. The storage would have the structure for example: */messages/ingest_date/{thread}/message_part-0000.parquet*
 
 **Security considerations:**
 - Network:  All services in the pipeline should be configured to operate within a virtual network, using Private Endpoints. This ensures that data never traverses the public internet, drastically reducing the attack surface and protecting against external threats. 
