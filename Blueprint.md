@@ -17,7 +17,7 @@ I also assume that `colleagues.txt` contains all the colleagues working across a
 
 The general pipeline and the dataflow is described in the diagram below. 
  - Blob Storage: Can be an AWS S3 bucket or a Azure Blob Storage, this stores our txt files. Let's assume Azure services from now on.
- - In case someone uploads new files to this storage, we trigger an event and the functions streams the files, calls our parser and normalizer python script that lives in a docker container. The logic of the parsing is described later on.
+ - In case someone uploads new files to this storage, we trigger an event and the functions streams the files, calls our parser and normalizer python script that lives in a docker container. The logic of the parsing is not described here, but the core idea is that through series of regex functions and splitting we end up in a concise data format that is not missing any information.
  - In case of a simpler workflow we can directly write our parquet outputs, or we can create an Azure Service Bus (OPTIONAL) that enables us for parallelization, retries and buffering.
  - OPTIONAL: If we want to have a smart, natural language queries, we can use ElasticSearch or AzureCognitiveSearch services through json formats. Index only a subset (subjects, participants, dates, thread ids, limited body snippets) to keep cost low.
  - OPTIONAL:  We can monitor writing failures and metrics through Azure Monitor and can even quarantine our dead messages for further assesment.
