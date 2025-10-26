@@ -128,25 +128,6 @@ class PromptParser:
         df["name"] = df.get("name", pd.Series([None]*len(df))).fillna("")
         df["role"] = df.get("role", pd.Series([None]*len(df))).fillna("Unknown")
 
-        def parse_aliases(x) -> List[str]:
-            if x is None or (isinstance(x, float) and np.isnan(x)):
-                return []
-            if isinstance(x, list):
-                return [str(a).strip() for a in x if a]
-            s = str(x).strip()
-            if not s:
-                return []
-            # try JSON list first
-            try:
-                parsed = json.loads(s)
-                if isinstance(parsed, list):
-                    return [str(a).strip() for a in parsed if a]
-            except Exception:
-                pass
-            # fallback: split by common delimiters
-            return [t.strip() for t in re.split(r"[,;\s]+", s) if t.strip()]
-
-
         alias_map: Dict[str, str] = {}
         people_map: Dict[str, Person] = {}
         for _, row in df.iterrows():
