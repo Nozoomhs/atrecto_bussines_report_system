@@ -102,24 +102,6 @@ class PromptParser:
             }
         return out
 
-    def build_prompts_for_thread(self, thread_id: str | int) -> Dict[str, str]:
-        """Return {agent_key: prompt_text} for a single thread_id."""
-        self._lazy_load()
-        thread_id = str(thread_id)
-        tdf = self._messages_df[self._messages_df["thread_id"].astype(str) == thread_id]
-        if tdf.empty:
-            raise KeyError(f"thread_id={thread_id} not found in Messages.parquet")
-        tdf = self._prepare_thread_messages(tdf)
-        participants_block = self._format_participants_block(thread_id, tdf)
-        messages_block = self._format_messages_block(tdf)
-
-        return {
-            "cost_considerations": self._render_cost_prompt(participants_block, messages_block),
-            "unresolved_items": self._render_unresolved_prompt(participants_block, messages_block),
-            "risks_blockers": self._render_risks_prompt(participants_block, messages_block),
-            "gross_negligence": self._render_ownsership_prompt(participants_block, messages_block),
-        }
-
     # loading & normalization
     def _lazy_load(self) -> None:
         if self._threads_df is None:
